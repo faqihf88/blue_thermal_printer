@@ -576,7 +576,9 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
       int rightTextLength = getBytesLength(msg3);
       int marginBetweenMiddleAndRight = PrinterCommands.LINE_BYTE_SIZE - leftTextLength - rightTextLength;
       int adjusment;
-      if(msg3 == ""){
+      String empty = new String();
+
+      if(msg3.equals(empty)){
         adjusment = 15;
       }else{
         adjusment =  marginBetweenMiddleAndRight - 12;
