@@ -116,8 +116,7 @@ public class PrinterCommands {
    /**
     * 打印纸一行最大的字节
     */
-   private static  int LINE_BYTE_SIZE = 48;
-   public
+   public static  int LINE_BYTE_SIZE = 48;
 
    // 对齐方式
    public static final int ALIGN_LEFT_NEW = 0;     // 靠左
