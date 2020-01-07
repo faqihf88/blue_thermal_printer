@@ -275,6 +275,16 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
           result.error("invalid_argument", "argument 'message' not found", null);
         }
         break;
+        case "printDuaKolom":
+        if (arguments.containsKey("string1")) {
+          String string1 = (String) arguments.get("string1");
+          String string2 = (String) arguments.get("string2");
+          int size = (int) arguments.get("size");
+          printDuaKolom(result, string1, string2, size, 0);
+        } else {
+          result.error("invalid_argument", "argument 'message' not found", null);
+        }
+        break;
       case "printTigaKolom":
         if (arguments.containsKey("string1")) {
           String string1 = (String) arguments.get("string1");
@@ -515,6 +525,30 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     }
     try {
       THREAD.write(cc);
+      String line = String.format("%-25s %15s %n", msg1, msg2);
+      THREAD.write(line.getBytes());
+      result.success(true);
+    } catch (Exception ex) {
+      Log.e(TAG, ex.getMessage(), ex);
+      result.error("write_error", ex.getMessage(), exceptionToString(ex));
+    }
+
+  }
+
+  private void printDuaKolom(Result result, String msg1, String msg2, int size, int align) {
+    byte[] cc = new byte[] { 0x1B, 0x21, 0x03 }; // 0- normal size text
+    // byte[] cc = new byte[]{0x1d,0x21,0x00}; // 0- normal size text
+    byte[] bb = new byte[] { 0x1B, 0x21, 0x08 }; // 1- only bold text
+    byte[] bb2 = new byte[] { 0x1B, 0x21, 0x20 }; // 2- bold with medium text
+    byte[] bb3 = new byte[] { 0x1B, 0x21, 0x10 }; // 3- bold with large text
+    byte[] bb4 = new byte[] { 0x1B, 0x21, 0x30 }; // 4- strong text
+    if (THREAD == null) {
+      result.error("write_error", "not connected", null);
+      return;
+    }
+    try {
+      THREAD.write(cc);
+      THREAD.write(PrinterCommands.ESC_ALIGN_RIGHT);
       String line = String.format("%-25s %15s %n", msg1, msg2);
       THREAD.write(line.getBytes());
       result.success(true);
