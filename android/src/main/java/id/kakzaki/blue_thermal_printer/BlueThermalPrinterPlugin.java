@@ -536,7 +536,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
 
       // THREAD.write(PrinterCommands.ESC_ALIGN_CENTER);
       String line = String.format("%-15s %15s %n", msg1, msg2);
-      THREAD.write(sb.toString());
+      THREAD.write(sb.toString().getBytes());
       result.success(true);
     } catch (Exception ex) {
       Log.e(TAG, ex.getMessage(), ex);
