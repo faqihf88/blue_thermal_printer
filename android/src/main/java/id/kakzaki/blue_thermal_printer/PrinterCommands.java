@@ -57,5 +57,85 @@ public class PrinterCommands {
 
     public static final byte[] ESC_ENTER = new byte[] { 0x1B, 0x4A, 0x40 };
     public static final byte[] PRINTE_TEST = new byte[] { 0x1D, 0x28, 0x41 };
+    
+    /*
+    * 复位打印机
+    */
+   public static final byte[] RESET = {0x1b, 0x40};
+
+   /**
+    * 左对齐
+    */
+   public static final byte[] ALIGN_LEFT = {0x1b, 0x61, 0x00};
+
+   /**
+    * 中间对齐
+    */
+   public static final byte[] ALIGN_CENTER = {0x1b, 0x61, 0x01};
+
+   /**
+    * 右对齐
+    */
+   public static final byte[] ALIGN_RIGHT = {0x1b, 0x61, 0x02};
+
+   /**
+    * 选择加粗模式
+    */
+   public static final byte[] BOLD = {0x1b, 0x45, 0x01};
+
+   /**
+    * 取消加粗模式
+    */
+   public static final byte[] BOLD_CANCEL = {0x1b, 0x45, 0x00};
+
+   /**
+    * 宽高加倍
+    */
+   public static final byte[] DOUBLE_HEIGHT_WIDTH = {0x1d, 0x21, 0x11};
+
+   /**
+    * 宽加倍
+    */
+   public static final byte[] DOUBLE_WIDTH = {0x1d, 0x21, 0x10};
+
+   /**
+    * 高加倍
+    */
+   public static final byte[] DOUBLE_HEIGHT = {0x1d, 0x21, 0x01};
+
+   /**
+    * 字体不放大
+    */
+   public static final byte[] NORMAL = {0x1d, 0x21, 0x00};
+
+   /**
+    * 设置默认行间距
+    */
+   public static final byte[] LINE_SPACING_DEFAULT = {0x1b, 0x32};
+
+   /**
+    * 打印纸一行最大的字节
+    */
+   private static  int LINE_BYTE_SIZE = 48;
+
+
+   // 对齐方式
+   public static final int ALIGN_LEFT_NEW = 0;     // 靠左
+   public static final int ALIGN_CENTER_NEW = 1;   // 居中
+   public static final int ALIGN_RIGHT_NEW  = 2;    // 靠右
+
+   //字体大小
+   public static final int FONT_NORMAL_NEW  = 0;    // 正常
+   public static final int FONT_MIDDLE_NEW = 1;    // 中等
+   public static final int FONT_BIG_NEW  = 2;       // 大
+   public static final int FONT_BIG_NEW3 = 3;    // 字体3
+   public static final int FONT_BIG_NEW4  = 4;       // 字体4
+   public static final int FONT_BIG_NEW5 = 5;    // 字体5
+   public static final int FONT_BIG_NEW6  = 6;       // 字体6
+   public static final int FONT_BIG_NEW7  = 7;    // 字体7
+   public static final int FONT_BIG_NEW8  = 8;       // 字体8
+   //加粗模式
+   public static final int FONT_BOLD_NEW  = 0;              // 字体加粗
+   public static final int FONT_BOLD_CANCEL_NEW  = 1;       // 取消加粗
 
 }

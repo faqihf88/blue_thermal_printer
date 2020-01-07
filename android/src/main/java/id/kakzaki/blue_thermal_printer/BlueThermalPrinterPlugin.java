@@ -595,6 +595,398 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     }
   }
 
+  private void printText(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+
+    String sendData = args.getString(0);
+
+    if (isConnection) {
+        try {
+           if(sendData!=null&&!"".equals(sendData)) {
+
+
+               JSONArray top_array = new JSONArray(sendData);
+
+               if (top_array != null && top_array.length() > 0) {
+                       for (int m = 0; m < top_array.length(); m++) {
+                           JSONObject jsonData = (JSONObject) top_array.get(m);
+                            sendprint(jsonData);
+                       }
+                   }
+
+               if(LINE_BYTE_SIZE==32){
+                   THREAD.printText("\n");
+                   THREAD.printText("\n");
+                   THREAD.printText("\n");
+                   THREAD.printText("\n");
+                   THREAD.printText("\n");
+               }
+               //结束循环时
+               THREAD.selectCommand(THREAD.getCutPaperCmd());
+           }
+            result.success(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.error("write_error", e.getMessage(), exceptionToString(e));
+          }
+    } else {
+      result.error("write_error");
+    }
+}
+
+public void sendprint(JSONObject jsonData){
+
+
+    try{
+            System.out.println("jsonData:"+jsonData);
+            int infoType = jsonData.optInt("infoType");
+            String text = jsonData.optString("text");
+            int fontType = jsonData.optInt("fontType");
+            int aligmentType = jsonData.optInt("aligmentType");
+            int isTitle = jsonData.optInt("isTitle");
+            int maxWidth = jsonData.optInt("maxWidth");
+            int qrCodeSize = jsonData.optInt("qrCodeSize");
+            JSONArray textArray = jsonData.optJSONArray("textArray");
+
+                                  /*  类型 infoType text= 0;          textList= 1;         barCode = 2;          qrCode = 3;
+                                           image  = 4;         seperatorLine   = 5;            spaceLine       = 6;            footer          = 7;*/
+
+
+            int fontType_int = fontType;
+            int aligmentType_int = aligmentType;
+            //                      int fontType_int =0;
+            //                       int aligmentType_int =0;
+            //                       try{
+            //                           fontType_int =Integer.parseInt(fontType);
+            //                       }catch (Exception e){
+            //
+            //                       }
+            //
+            //                       try{
+            //                           aligmentType_int =Integer.parseInt(aligmentType);
+            //                       }catch (Exception e){
+            //
+            //                       }
+
+            if (isTitle == 1) {
+                THREAD.write(PrinterCommands.BOLD);
+            } else {
+                THREAD.write(PrinterCommands.BOLD_CANCEL);
+            }
+          //  THREAD.write(getAlignCmd(aligmentType_int));
+          //   THREAD.write(getFontSizeCmd(fontType_int));
+
+            if (infoType == 0) {
+                THREAD.printText(text);
+            } else if (infoType == 1) {
+                if (textArray != null && textArray.length() > 0) {
+                    if (textArray.length() == 2) {
+                       THREAD.printText(THREAD.printTwoData(textArray.get(0).toString(), textArray.get(1).toString()));
+                    } else if (textArray.length() == 3) {
+                        THREAD.printText(THREAD.printThreeData(textArray.get(0).toString(), textArray.get(1).toString(), textArray.get(2).toString()));
+                    } else if (textArray.length() == 4) {
+                        THREAD.printText(THREAD.printFourData(textArray.get(0).toString(), textArray.get(1).toString(), textArray.get(2).toString(), textArray.get(3).toString()));
+                    }
+                }
+            } else if (infoType == 2) {
+                THREAD.printText(getBarcodeCmd(text));
+            } else if (infoType == 3) {
+                // 发送二维码打印图片前导指令
+                byte[] start = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1B,
+                        0x40, 0x1B, 0x33, 0x00};
+               THREAD.write(start);
+               THREAD.write(getQrCodeCmd(text));
+                // 发送结束指令
+                byte[] end = {0x1d, 0x4c, 0x1f, 0x00};
+                THREAD.write(end);
+            } else if (infoType == 4) {
+                text = text.replace("data:image/jpeg;base64,", "").replace("data:image/png;base64,", "");
+
+
+                /**获取打印图片的数据**/
+                byte[] bitmapArray;
+                bitmapArray = Base64.decode(text, Base64.DEFAULT);
+                for (int n = 0; n < bitmapArray.length; ++n) {
+                    if (bitmapArray[n] < 0) {// 调整异常数据
+                        bitmapArray[n] += 256;
+                    }
+
+                }
+
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+
+
+                bitmap =compressPic(bitmap);
+
+                if(bitmap!=null) {
+                    //图片的长和框必须是大于24*size
+                    byte[] draw2PxPoint = draw2PxPoint(bitmap);
+                    //发送打印图片前导指令
+
+                    THREAD.write(draw2PxPoint);
+                }
+
+                //图片的长和框必须是大于24*size
+            //  byte[] draw2PxPoint = PicFromPrintUtils.draw2PxPoint(bitmap);
+                //发送打印图片前导指令
+
+             // THREAD.selectCommand(draw2PxPoint);
+
+
+
+
+                //THREAD.selectCommand(draw2PxPoint);
+                //InputStream fin = Bitmap2IS(bitmap);
+               //byte[] buffer = getReadBitMapBytes(bitmap);
+                //发送打印图片前导指令
+               //byte[] start = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1B,
+               //       0x40, 0x1B, 0x33, 0x00 };
+             //  THREAD.selectCommand(start);
+               //THREAD.selectCommandByte(buffer);
+                  // 发送结束指令
+              //  byte[] end = { 0x1d, 0x4c, 0x1f, 0x00 };
+              //  THREAD.selectCommand(end);
+                //THREAD.selectCommand(bitmapArray);
+                // 发送结束指令
+
+            } else if (infoType == 5) {
+                THREAD.printText(printSeperatorLine());
+            } else if (infoType == 6) {
+                THREAD.printText("\n");
+            } else if (infoType == 7) {
+                THREAD.printText(text);
+            }else if(infoType == 8) {
+                //结束循环时
+                THREAD.write(THREAD.getCutPaperCmd());
+            }
+            THREAD.printText("\n");
+
+
+    } catch (Exception e) {
+        e.printStackTrace();;
+    }
+
+}
+
+
+/**
+     * 打印两列
+     *
+     * @param leftText  左侧文字
+     * @param rightText 右侧文字
+     * @return
+     */
+    @SuppressLint("NewApi")
+    public static String printTwoData(String leftText, String rightText) {
+        StringBuilder sb = new StringBuilder();
+        int leftTextLength = getBytesLength(leftText);
+        int rightTextLength = getBytesLength(rightText);
+        sb.append(leftText);
+
+        // 计算两侧文字中间的空格
+        int marginBetweenMiddleAndRight = LINE_BYTE_SIZE - leftTextLength - rightTextLength;
+
+        for (int i = 0; i < marginBetweenMiddleAndRight; i++) {
+            sb.append(" ");
+        }
+        sb.append(rightText);
+        return sb.toString();
+    }
+
+    /**
+     * 打印三列
+     *
+     * @param leftText   左侧文字
+     * @param middleText 中间文字
+     * @param rightText  右侧文字
+     * @return
+     */
+    @SuppressLint("NewApi")
+    public static String printThreeData(String leftText, String middleText, String rightText) {
+
+        /**
+         * 打印三列时，中间一列的中心线距离打印纸左侧的距离
+         */
+       int LEFT_LENGTH =LINE_BYTE_SIZE/2;
+
+        /**
+         * 打印三列时，中间一列的中心线距离打印纸右侧的距离
+         */
+        int RIGHT_LENGTH = LINE_BYTE_SIZE/2;
+
+        /**
+         * 打印三列时，第一列汉字最多显示几个文字
+         */
+        int LEFT_TEXT_MAX_LENGTH = LEFT_LENGTH/2-2;
+
+        StringBuilder sb = new StringBuilder();
+        // 左边最多显示 LEFT_TEXT_MAX_LENGTH 个汉字 + 两个点
+        if (leftText.length() > LEFT_TEXT_MAX_LENGTH) {
+            //leftText = leftText.substring(0, LEFT_TEXT_MAX_LENGTH) + "..";
+        }
+        int leftTextLength = getBytesLength(leftText);
+        int middleTextLength = getBytesLength(middleText);
+        int rightTextLength = getBytesLength(rightText);
+
+        sb.append(leftText);
+        // 计算左侧文字和中间文字的空格长度
+        int marginBetweenLeftAndMiddle = LEFT_LENGTH - leftTextLength - middleTextLength / 2;
+
+        for (int i = 0; i < marginBetweenLeftAndMiddle; i++) {
+            sb.append(" ");
+        }
+        sb.append(middleText);
+
+        // 计算右侧文字和中间文字的空格长度
+        int marginBetweenMiddleAndRight = RIGHT_LENGTH - middleTextLength / 2 - rightTextLength;
+
+        for (int i = 0; i < marginBetweenMiddleAndRight; i++) {
+            sb.append(" ");
+        }
+
+        // 打印的时候发现，最右边的文字总是偏右一个字符，所以需要删除一个空格
+        sb.delete(sb.length() - 1, sb.length()).append(rightText);
+        return sb.toString();
+    }
+
+
+    /**
+     * 打印四列
+     *
+     * @param leftText   左侧文字
+     * @param middleText1 中间文字
+     * @param rightText  右侧文字
+     * @return
+     */
+    @SuppressLint("NewApi")
+    public static String printFourData(String leftText, String middleText1, String middleText2, String rightText) {
+        StringBuilder sb = new StringBuilder();
+        /**
+         * 打印三列时，中间一列的中心线距离打印纸左侧的距离
+         */
+        int LEFT_LENGTH =LINE_BYTE_SIZE;
+
+        /**
+         * 打印三列时，中间一列的中心线距离打印纸右侧的距离
+         */
+      //  int RIGHT_LENGTH_1 = LEFT_LENGTH-20;
+        int RIGHT_LENGTH_2 = 6;
+        int RIGHT_LENGTH_3 = 6;
+        int RIGHT_LENGTH_4 = 8;
+        int RIGHT_LENGTH_1 = LEFT_LENGTH-RIGHT_LENGTH_2-RIGHT_LENGTH_3-RIGHT_LENGTH_4;
+        /**
+         * 打印三列时，第一列汉字最多显示几个文字
+         */
+
+        int sub_length=2;
+        if(LINE_BYTE_SIZE==32){
+            sub_length=0;
+        }
+
+        int leftTextLength = getBytesLength(leftText);
+        int middle1TextLength = getBytesLength(middleText1);
+        int middle2TextLength = getBytesLength(middleText2);
+       // int rightTextLength = getBytesLength(rightText);
+
+        sb.append(leftText);
+
+        for (int i = leftTextLength; i < RIGHT_LENGTH_1; i++) {
+            sb.append(" ");
+        }
+
+        sb.append(middleText1);
+
+        for (int i = RIGHT_LENGTH_1+middle1TextLength; i < RIGHT_LENGTH_1+RIGHT_LENGTH_2; i++) {
+            sb.append(" ");
+        }
+        sb.append(middleText2);
+
+        for (int i = RIGHT_LENGTH_1+RIGHT_LENGTH_2+middle2TextLength; i < RIGHT_LENGTH_1+RIGHT_LENGTH_2+RIGHT_LENGTH_3; i++) {
+            sb.append(" ");
+        }
+
+        sb.append(rightText);
+
+
+        // 打印的时候发现，最右边的文字总是偏右一个字符，所以需要删除一个空格
+       // sb.delete(sb.length() - 3, sb.length()).append(rightText);
+        return sb.toString();
+    }
+    /**
+     * 打印四列
+     *
+     * @param leftText   左侧文字
+     * @param middleText1 中间文字
+     * @param rightText  右侧文字
+     * @return
+     */
+    @SuppressLint("NewApi")
+    public static String printFourDataOld(String leftText, String middleText1, String middleText2, String rightText) {
+        StringBuilder sb = new StringBuilder();
+        /**
+         * 打印三列时，中间一列的中心线距离打印纸左侧的距离
+         */
+        int LEFT_LENGTH =LINE_BYTE_SIZE/2;
+
+        /**
+         * 打印三列时，中间一列的中心线距离打印纸右侧的距离
+         */
+        int RIGHT_LENGTH = LINE_BYTE_SIZE/2;
+
+        /**
+         * 打印三列时，第一列汉字最多显示几个文字
+         */
+
+        int sub_length=2;
+        if(LINE_BYTE_SIZE==32){
+            sub_length=0;
+        }
+
+        int sub_length2=1;
+       // if(LINE_BYTE_SIZE==32){
+          //  sub_length2=1;
+      //  }
+
+        int LEFT_TEXT_MAX_LENGTH = LEFT_LENGTH/2-sub_length;
+
+        // 左边最多显示 LEFT_TEXT_MAX_LENGTH 个汉字 + 两个点
+        if (leftText.length() > (LEFT_TEXT_MAX_LENGTH+2)/2) {
+            //leftText = leftText.substring(0, (LEFT_TEXT_MAX_LENGTH+2)/2-1) + ".";
+        }
+        int leftTextLength = getBytesLength(leftText);
+        int middle1TextLength = getBytesLength(middleText1);
+        int middle2TextLength = getBytesLength(middleText2);
+        int rightTextLength = getBytesLength(rightText);
+
+        sb.append(leftText);
+        // 计算左侧文字和中间文字的空格长度
+        int marginBetweenLeftAndMiddle1 = LEFT_LENGTH- leftTextLength - middle1TextLength ;
+
+        for (int i = LEFT_LENGTH/4-sub_length2; i < marginBetweenLeftAndMiddle1; i++) {
+            sb.append(" ");
+        }
+        sb.append(middleText1);
+
+
+        // 计算右侧文字和中间文字的空格长度
+        int marginBetweenMiddleAndRight = RIGHT_LENGTH- middle2TextLength - rightTextLength;
+
+        for (int i = RIGHT_LENGTH/4-sub_length2; i < marginBetweenMiddleAndRight; i++) {
+            sb.append(" ");
+        }
+        sb.append(middleText2);
+
+        // 计算右侧文字和中间文字的空格长度
+        int marginBetweenMiddle2AndRight = RIGHT_LENGTH - middle2TextLength  - rightTextLength;
+
+        for (int i = RIGHT_LENGTH/4-sub_length2; i < marginBetweenMiddle2AndRight; i++) {
+            sb.append(" ");
+        }
+        // 打印的时候发现，最右边的文字总是偏右一个字符，所以需要删除一个空格
+        sb.delete(sb.length() - 3, sb.length()).append(rightText);
+        return sb.toString();
+    }
+
+    
   private class ConnectedThread extends Thread {
     private final BluetoothSocket mmSocket;
     private final InputStream inputStream;
