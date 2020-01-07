@@ -581,6 +581,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
       }else{
         adjusment =  marginBetweenMiddleAndRight - 12;
       }
+      Log.v(TAG, "msg3 : " + msg3);
       Log.v(TAG, "marginBetweenMiddleAndRight : " + marginBetweenMiddleAndRight);
       Log.v(TAG, "adjusment : " + adjusment);
       String line = String.format("%-10s %1s %"+ adjusment +"s %n", msg1, msg2, msg3);
