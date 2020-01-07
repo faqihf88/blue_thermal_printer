@@ -581,7 +581,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
       if(msg3.equals(empty)){
         adjusment = 15;
       }else{
-        adjusment =  marginBetweenMiddleAndRight - 12;
+        adjusment =  marginBetweenMiddleAndRight - 20;
       }
       Log.v(TAG, "msg3 : " + msg3);
       Log.v(TAG, "marginBetweenMiddleAndRight : " + marginBetweenMiddleAndRight);
