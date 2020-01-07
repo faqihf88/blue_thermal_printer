@@ -523,7 +523,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
       StringBuilder sb = new StringBuilder();
       int leftTextLength = getBytesLength(msg1);
       int rightTextLength = getBytesLength(msg2);
-      sb.append(leftText);
+      sb.append(msg1);
 
       // 计算两侧文字中间的空格
       int marginBetweenMiddleAndRight = PrinterCommands.LINE_BYTE_SIZE - leftTextLength - rightTextLength;
@@ -531,7 +531,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
       for (int i = 0; i < marginBetweenMiddleAndRight; i++) {
           sb.append(" ");
       }
-      sb.append(rightText);
+      sb.append(msg2);
       // return sb.toString();
 
       // THREAD.write(PrinterCommands.ESC_ALIGN_CENTER);
