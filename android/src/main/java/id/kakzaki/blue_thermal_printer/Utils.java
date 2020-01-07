@@ -124,7 +124,7 @@ public class Utils {
         return data;
     }
 
-    public static byte px2Byte(int x, int y, Bitmap bit) {
+    private static byte px2Byte(int x, int y, Bitmap bit) {
         if (x < bit.getWidth() && y < bit.getHeight()) {
             byte b;
             int pixel = bit.getPixel(x, y);
@@ -140,6 +140,11 @@ public class Utils {
             return b;
         }
         return 0;
+    }
+
+    private static int RGB2Gray(int r, int g, int b) {
+        int gray = (int) (0.29900 * r + 0.58700 * g + 0.11400 * b);  //灰度转化公式
+        return gray;
     }
 
     public static List<String> binaryListToHexStringList(List<String> list) {
