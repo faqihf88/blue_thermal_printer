@@ -609,7 +609,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     }
   }
 
-  private void printTextwkwk(final JSONArray args, Result result) throws JSONException {
+  private void printText(final JSONArray args, Result result) throws JSONException {
 
     String sendData = args.getString(0);
 
