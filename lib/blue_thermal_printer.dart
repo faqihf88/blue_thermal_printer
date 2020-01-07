@@ -88,6 +88,9 @@ class BlueThermalPrinter {
 
   Future<dynamic> printLeftRight(String string1,String string2,int size) =>
       _channel.invokeMethod('printLeftRight', {'string1': string1, 'string2': string2,'size': size });
+
+  Future<dynamic> printTigaKolom(String string1,String string2, String string3,int size) =>
+      _channel.invokeMethod('printTigaKolom', {'string1': string1, 'string2': string2, 'string3': string3,'size': size });
 }
 
 

@@ -275,6 +275,17 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
           result.error("invalid_argument", "argument 'message' not found", null);
         }
         break;
+      case "printTigaKolom":
+        if (arguments.containsKey("string1")) {
+          String string1 = (String) arguments.get("string1");
+          String string2 = (String) arguments.get("string2");
+          String string3 = (String) arguments.get("string3");
+          int size = (int) arguments.get("size");
+          printTigaKolom(result, string1, string2, string3, size);
+        } else {
+          result.error("invalid_argument", "argument 'message' not found", null);
+        }
+        break;
       default:
         result.notImplemented();
         break;
@@ -503,41 +514,32 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
       return;
     }
     try {
-    //   switch (size) {
-    //     case 0:
-          THREAD.write(cc);
-    //       break;
-    //     case 1:
-          // THREAD.write(bb);
-    //       break;
-    //     case 2:
-    //       THREAD.write(bb2);
-    //       break;
-    //     case 3:
-    //       THREAD.write(bb3);
-    //       break;
-    //     case 4:
-    //       THREAD.write(bb4);
-    //       break;
-    //   }
-      StringBuilder sb = new StringBuilder();
-      int leftTextLength = getBytesLength(msg1);
-      int rightTextLength = getBytesLength(msg2);
-      sb.append(msg1);
-
-      // 计算两侧文字中间的空格
-      int marginBetweenMiddleAndRight = PrinterCommands.LINE_BYTE_SIZE - leftTextLength - rightTextLength;
-
-      for (int i = 0; i < marginBetweenMiddleAndRight; i++) {
-          sb.append(" ");
-      }
-      sb.append(msg2);
-      // return sb.toString();
-
-      // THREAD.write(PrinterCommands.ESC_ALIGN_CENTER);
+      THREAD.write(cc);
       String line = String.format("%-25s %15s %n", msg1, msg2);
       THREAD.write(line.getBytes());
-      // THREAD.write(sb.toString().getBytes());
+      result.success(true);
+    } catch (Exception ex) {
+      Log.e(TAG, ex.getMessage(), ex);
+      result.error("write_error", ex.getMessage(), exceptionToString(ex));
+    }
+
+  }
+
+  private void printTigaKolom(Result result, String msg1, String msg2, String msg3, int size) {
+    byte[] cc = new byte[] { 0x1B, 0x21, 0x03 }; // 0- normal size text
+    // byte[] cc = new byte[]{0x1d,0x21,0x00}; // 0- normal size text
+    byte[] bb = new byte[] { 0x1B, 0x21, 0x08 }; // 1- only bold text
+    byte[] bb2 = new byte[] { 0x1B, 0x21, 0x20 }; // 2- bold with medium text
+    byte[] bb3 = new byte[] { 0x1B, 0x21, 0x10 }; // 3- bold with large text
+    byte[] bb4 = new byte[] { 0x1B, 0x21, 0x30 }; // 4- strong text
+    if (THREAD == null) {
+      result.error("write_error", "not connected", null);
+      return;
+    }
+    try {
+      THREAD.write(cc);
+      String line = String.format("%-25s %15s %n", msg1, msg2);
+      THREAD.write(line.getBytes());
       result.success(true);
     } catch (Exception ex) {
       Log.e(TAG, ex.getMessage(), ex);
