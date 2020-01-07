@@ -503,23 +503,23 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
       return;
     }
     try {
-      switch (size) {
-        case 0:
-          THREAD.write(cc);
-          break;
-        case 1:
-          THREAD.write(bb);
-          break;
-        case 2:
-          THREAD.write(bb2);
-          break;
-        case 3:
-          THREAD.write(bb3);
-          break;
-        case 4:
-          THREAD.write(bb4);
-          break;
-      }
+    //   switch (size) {
+    //     case 0:
+    //       THREAD.write(cc);
+    //       break;
+    //     case 1:
+    //       THREAD.write(bb);
+    //       break;
+    //     case 2:
+    //       THREAD.write(bb2);
+    //       break;
+    //     case 3:
+    //       THREAD.write(bb3);
+    //       break;
+    //     case 4:
+    //       THREAD.write(bb4);
+    //       break;
+    //   }
       StringBuilder sb = new StringBuilder();
       int leftTextLength = getBytesLength(msg1);
       int rightTextLength = getBytesLength(msg2);
@@ -534,9 +534,10 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
       sb.append(msg2);
       // return sb.toString();
 
-      THREAD.write(PrinterCommands.ESC_ALIGN_CENTER);
+      // THREAD.write(PrinterCommands.ESC_ALIGN_CENTER);
       String line = String.format("%-15s %15s %n", msg1, msg2);
-      THREAD.write(line.getBytes());
+      // THREAD.write(line.getBytes());
+      THREAD.write(sb.toString().getBytes());
       result.success(true);
     } catch (Exception ex) {
       Log.e(TAG, ex.getMessage(), ex);
