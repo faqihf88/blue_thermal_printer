@@ -492,8 +492,8 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
   }
 
   private void printLeftRight(Result result, String msg1, String msg2, int size) {
-    byte[] cc = new byte[] { 0x1B, 0x21, 0x03 }; // 0- normal size text
-    // byte[] cc = new byte[]{0x1d,0x21,0x00}; // 0- normal size text
+    // byte[] cc = new byte[] { 0x1B, 0x21, 0x03 }; // 0- normal size text
+    byte[] cc = new byte[]{0x1d,0x21,0x00}; // 0- normal size text
     byte[] bb = new byte[] { 0x1B, 0x21, 0x08 }; // 1- only bold text
     byte[] bb2 = new byte[] { 0x1B, 0x21, 0x20 }; // 2- bold with medium text
     byte[] bb3 = new byte[] { 0x1B, 0x21, 0x10 }; // 3- bold with large text
@@ -535,7 +535,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
       // return sb.toString();
 
       // THREAD.write(PrinterCommands.ESC_ALIGN_CENTER);
-      String line = String.format("%-15s %15s %n", msg1, msg2);
+      String line = String.format("%-25s %15s %n", msg1, msg2);
       THREAD.write(line.getBytes());
       // THREAD.write(sb.toString().getBytes());
       result.success(true);
