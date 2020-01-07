@@ -572,7 +572,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     }
     try {
       THREAD.write(cc);
-      String line = String.format("%-10s %1s %15s %n", msg1, msg2, msg3);
+      String line = String.format("%-10s %1s %20s %n", msg1, msg2, msg3);
       THREAD.write(line.getBytes());
       result.success(true);
     } catch (Exception ex) {
