@@ -622,7 +622,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
                if (top_array != null && top_array.length() > 0) {
                        for (int m = 0; m < top_array.length(); m++) {
                            JSONObject jsonData = (JSONObject) top_array.get(m);
-                            sendprint(jsonData);
+                            sendprint(jsonData, result);
                        }
                    }
            }
@@ -633,7 +633,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
           }
 }
 
-public void sendprint(JSONObject jsonData){
+public void sendprint(JSONObject jsonData, Result result){
 
 
     try{
