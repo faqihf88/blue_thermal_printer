@@ -78,6 +78,8 @@ class BlueThermalPrinter {
 
   Future<dynamic> printNewLine() => _channel.invokeMethod('printNewLine');
 
+  Future<dynamic> printSeparatorLine() => _channel.invokeMethod('printSeparatorLine');
+
   Future<dynamic> paperCut() => _channel.invokeMethod('paperCut');
 
   Future<dynamic> printImage(String pathImage) =>

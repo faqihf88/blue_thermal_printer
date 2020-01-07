@@ -241,6 +241,10 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
         printNewLine(result);
         break;
 
+      case "printSeparatorLine":
+        printSeperatorLine(result);
+        break;
+
       case "paperCut":
         paperCut(result);
         break;
@@ -594,6 +598,21 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
       result.error("write_error", ex.getMessage(), exceptionToString(ex));
     }
 
+  }
+
+  private void printSeperatorLine(Result result) {
+   try {
+    StringBuilder sb = new StringBuilder();
+    for (int i=0;i< PrinterCommands.LINE_BYTE_SIZE;i++){
+        sb.append("-");
+    }
+
+    THREAD.write(sb.toString().getBytes());
+    result.success(true);
+   } catch (Exception ex) {
+     Log.e(TAG, ex.getMessage(), ex);
+    result.error("write_error", ex.getMessage(), exceptionToString(ex));
+   }
   }
 
   private void printNewLine(Result result) {
