@@ -237,17 +237,6 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
         }
         break;
       
-      case "printText":
-        if (arguments.containsKey("message")) {
-          JSONArray message = arguments.get("message");
-          int size = (int) arguments.get("size");
-          int align = (int) arguments.get("align");
-          printText(message, result);
-        } else {
-          result.error("invalid_argument", "argument 'message' not found", null);
-        }
-        break;
-
       case "printNewLine":
         printNewLine(result);
         break;
@@ -531,9 +520,23 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
           THREAD.write(bb4);
           break;
       }
-      THREAD.write(PrinterCommands.ESC_ALIGN_CENTER);
+      StringBuilder sb = new StringBuilder();
+      int leftTextLength = getBytesLength(msg1);
+      int rightTextLength = getBytesLength(msg2);
+      sb.append(leftText);
+
+      // 计算两侧文字中间的空格
+      int marginBetweenMiddleAndRight = PrinterCommands.LINE_BYTE_SIZE - leftTextLength - rightTextLength;
+
+      for (int i = 0; i < marginBetweenMiddleAndRight; i++) {
+          sb.append(" ");
+      }
+      sb.append(rightText);
+      // return sb.toString();
+
+      // THREAD.write(PrinterCommands.ESC_ALIGN_CENTER);
       String line = String.format("%-15s %15s %n", msg1, msg2);
-      THREAD.write(line.getBytes());
+      THREAD.write(sb.toString());
       result.success(true);
     } catch (Exception ex) {
       Log.e(TAG, ex.getMessage(), ex);
