@@ -676,89 +676,18 @@ public void sendprint(JSONObject jsonData){
           //   THREAD.write(getFontSizeCmd(fontType_int));
 
             if (infoType == 0) {
-                THREAD.printText(text);
+                printText(text);
             } else if (infoType == 1) {
                 if (textArray != null && textArray.length() > 0) {
                     if (textArray.length() == 2) {
-                       THREAD.printText(printTwoData(textArray.get(0).toString(), textArray.get(1).toString()));
+                       printText(printTwoData(textArray.get(0).toString(), textArray.get(1).toString()));
                     } else if (textArray.length() == 3) {
-                        THREAD.printText(printThreeData(textArray.get(0).toString(), textArray.get(1).toString(), textArray.get(2).toString()));
+                        printText(printThreeData(textArray.get(0).toString(), textArray.get(1).toString(), textArray.get(2).toString()));
                     } else if (textArray.length() == 4) {
-                        THREAD.printText(THREAD.printFourData(textArray.get(0).toString(), textArray.get(1).toString(), textArray.get(2).toString(), textArray.get(3).toString()));
+                        printText(printFourData(textArray.get(0).toString(), textArray.get(1).toString(), textArray.get(2).toString(), textArray.get(3).toString()));
                     }
                 }
-            } else if (infoType == 2) {
-                THREAD.printText(getBarcodeCmd(text));
-            } else if (infoType == 3) {
-                // 发送二维码打印图片前导指令
-                byte[] start = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1B,
-                        0x40, 0x1B, 0x33, 0x00};
-               THREAD.write(start);
-               THREAD.write(getQrCodeCmd(text));
-                // 发送结束指令
-                byte[] end = {0x1d, 0x4c, 0x1f, 0x00};
-                THREAD.write(end);
-            } else if (infoType == 4) {
-                text = text.replace("data:image/jpeg;base64,", "").replace("data:image/png;base64,", "");
-
-
-                /**获取打印图片的数据**/
-                byte[] bitmapArray;
-                bitmapArray = Base64.decode(text, Base64.DEFAULT);
-                for (int n = 0; n < bitmapArray.length; ++n) {
-                    if (bitmapArray[n] < 0) {// 调整异常数据
-                        bitmapArray[n] += 256;
-                    }
-
-                }
-
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
-
-
-                bitmap =compressPic(bitmap);
-
-                if(bitmap!=null) {
-                    //图片的长和框必须是大于24*size
-                    byte[] draw2PxPoint = draw2PxPoint(bitmap);
-                    //发送打印图片前导指令
-
-                    THREAD.write(draw2PxPoint);
-                }
-
-                //图片的长和框必须是大于24*size
-            //  byte[] draw2PxPoint = PicFromPrintUtils.draw2PxPoint(bitmap);
-                //发送打印图片前导指令
-
-             // THREAD.selectCommand(draw2PxPoint);
-
-
-
-
-                //THREAD.selectCommand(draw2PxPoint);
-                //InputStream fin = Bitmap2IS(bitmap);
-               //byte[] buffer = getReadBitMapBytes(bitmap);
-                //发送打印图片前导指令
-               //byte[] start = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1B,
-               //       0x40, 0x1B, 0x33, 0x00 };
-             //  THREAD.selectCommand(start);
-               //THREAD.selectCommandByte(buffer);
-                  // 发送结束指令
-              //  byte[] end = { 0x1d, 0x4c, 0x1f, 0x00 };
-              //  THREAD.selectCommand(end);
-                //THREAD.selectCommand(bitmapArray);
-                // 发送结束指令
-
-            } else if (infoType == 5) {
-                THREAD.printText(printSeperatorLine());
-            } else if (infoType == 6) {
-                THREAD.printText("\n");
-            } else if (infoType == 7) {
-                THREAD.printText(text);
-            }else if(infoType == 8) {
-                //结束循环时
-                THREAD.write(THREAD.getCutPaperCmd());
             }
-            THREAD.printText("\n");
 
 
     } catch (Exception e) {
