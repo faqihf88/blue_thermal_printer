@@ -705,6 +705,10 @@ public void sendprint(JSONObject jsonData, Result result){
 
 }
 
+@SuppressLint("NewApi")
+    private static int getBytesLength(String msg) {
+        return msg.getBytes(Charset.forName("GB2312")).length;
+    }
 
 /**
      * 打印两列
@@ -721,7 +725,7 @@ public void sendprint(JSONObject jsonData, Result result){
         sb.append(leftText);
 
         // 计算两侧文字中间的空格
-        int marginBetweenMiddleAndRight = LINE_BYTE_SIZE - leftTextLength - rightTextLength;
+        int marginBetweenMiddleAndRight = PrinterCommands.LINE_BYTE_SIZE - leftTextLength - rightTextLength;
 
         for (int i = 0; i < marginBetweenMiddleAndRight; i++) {
             sb.append(" ");
