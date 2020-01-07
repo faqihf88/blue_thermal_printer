@@ -576,7 +576,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
       int rightTextLength = getBytesLength(msg3);
       int marginBetweenMiddleAndRight = PrinterCommands.LINE_BYTE_SIZE - leftTextLength - rightTextLength;
 
-      Log.v("marginBetweenMiddleAndRight : " + marginBetweenMiddleAndRight);
+      Log.v(TAG, "marginBetweenMiddleAndRight : " + marginBetweenMiddleAndRight);
       String line = String.format("%-10s %1s %"+ marginBetweenMiddleAndRight +"s %n", msg1, msg2, msg3);
       THREAD.write(line.getBytes());
       result.success(true);
