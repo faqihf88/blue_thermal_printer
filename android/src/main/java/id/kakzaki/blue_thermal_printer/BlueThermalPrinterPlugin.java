@@ -758,7 +758,7 @@ public void sendprint(JSONObject jsonData, Result result){
         /**
          * 打印三列时，第一列汉字最多显示几个文字
          */
-        int LEFT_TEXT_MAX_LENGTH = PrinterCommands.LEFT_LENGTH/2-2;
+        int LEFT_TEXT_MAX_LENGTH = LEFT_LENGTH/2-2;
 
         StringBuilder sb = new StringBuilder();
         // 左边最多显示 LEFT_TEXT_MAX_LENGTH 个汉字 + 两个点
