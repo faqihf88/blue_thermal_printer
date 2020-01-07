@@ -601,7 +601,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     }
   }
 
-  private void printText(final JSONArray args) throws JSONException {
+  private void printTextwkwk(final JSONArray args) throws JSONException {
 
     String sendData = args.getString(0);
 
@@ -617,16 +617,6 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
                             sendprint(jsonData);
                        }
                    }
-
-              //  if(LINE_BYTE_SIZE==32){
-              //      THREAD.printText("\n");
-              //      THREAD.printText("\n");
-              //      THREAD.printText("\n");
-              //      THREAD.printText("\n");
-              //      THREAD.printText("\n");
-              //  }
-              //  //结束循环时
-              //  THREAD.selectCommand(THREAD.getCutPaperCmd());
            }
             result.success(true);
         } catch (Exception e) {
@@ -682,9 +672,9 @@ public void sendprint(JSONObject jsonData){
             } else if (infoType == 1) {
                 if (textArray != null && textArray.length() > 0) {
                     if (textArray.length() == 2) {
-                       THREAD.printText(THREAD.printTwoData(textArray.get(0).toString(), textArray.get(1).toString()));
+                       THREAD.printText(printTwoData(textArray.get(0).toString(), textArray.get(1).toString()));
                     } else if (textArray.length() == 3) {
-                        THREAD.printText(THREAD.printThreeData(textArray.get(0).toString(), textArray.get(1).toString(), textArray.get(2).toString()));
+                        THREAD.printText(printThreeData(textArray.get(0).toString(), textArray.get(1).toString(), textArray.get(2).toString()));
                     } else if (textArray.length() == 4) {
                         THREAD.printText(THREAD.printFourData(textArray.get(0).toString(), textArray.get(1).toString(), textArray.get(2).toString(), textArray.get(3).toString()));
                     }
