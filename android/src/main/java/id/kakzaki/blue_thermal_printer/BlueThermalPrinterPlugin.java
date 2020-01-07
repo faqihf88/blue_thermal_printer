@@ -505,10 +505,10 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     try {
     //   switch (size) {
     //     case 0:
-          THREAD.write(cc);
+          // THREAD.write(cc);
     //       break;
     //     case 1:
-    //       THREAD.write(bb);
+          THREAD.write(bb);
     //       break;
     //     case 2:
     //       THREAD.write(bb2);
@@ -536,8 +536,8 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
 
       // THREAD.write(PrinterCommands.ESC_ALIGN_CENTER);
       String line = String.format("%-15s %15s %n", msg1, msg2);
-      // THREAD.write(line.getBytes());
-      THREAD.write(sb.toString().getBytes());
+      THREAD.write(line.getBytes());
+      // THREAD.write(sb.toString().getBytes());
       result.success(true);
     } catch (Exception ex) {
       Log.e(TAG, ex.getMessage(), ex);
