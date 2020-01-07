@@ -124,6 +124,24 @@ public class Utils {
         return data;
     }
 
+    public static byte px2Byte(int x, int y, Bitmap bit) {
+        if (x < bit.getWidth() && y < bit.getHeight()) {
+            byte b;
+            int pixel = bit.getPixel(x, y);
+            int red = (pixel & 0x00ff0000) >> 16; // 取高两位
+            int green = (pixel & 0x0000ff00) >> 8; // 取中两位
+            int blue = pixel & 0x000000ff; // 取低两位
+            int gray = RGB2Gray(red, green, blue);
+            if (gray < 128) {
+                b = 1;
+            } else {
+                b = 0;
+            }
+            return b;
+        }
+        return 0;
+    }
+
     public static List<String> binaryListToHexStringList(List<String> list) {
         List<String> hexList = new ArrayList<String>();
         for (String binaryStr : list) {
