@@ -236,6 +236,17 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
           result.error("invalid_argument", "argument 'message' not found", null);
         }
         break;
+      
+      case "printText":
+        if (arguments.containsKey("message")) {
+          JSONArray message = arguments.get("message");
+          int size = (int) arguments.get("size");
+          int align = (int) arguments.get("align");
+          printText(message, result);
+        } else {
+          result.error("invalid_argument", "argument 'message' not found", null);
+        }
+        break;
 
       case "printNewLine":
         printNewLine(result);
