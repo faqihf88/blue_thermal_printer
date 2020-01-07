@@ -34,7 +34,8 @@ import java.util.UUID;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.apache.cordova.CallbackContext;
+import android.annotation.SuppressLint;
+
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.EventChannel.StreamHandler;
@@ -600,11 +601,10 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     }
   }
 
-  private void printText(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+  private void printText(final JSONArray args) throws JSONException {
 
     String sendData = args.getString(0);
 
-    if (isConnection) {
         try {
            if(sendData!=null&&!"".equals(sendData)) {
 
@@ -618,24 +618,21 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
                        }
                    }
 
-               if(LINE_BYTE_SIZE==32){
-                   THREAD.printText("\n");
-                   THREAD.printText("\n");
-                   THREAD.printText("\n");
-                   THREAD.printText("\n");
-                   THREAD.printText("\n");
-               }
-               //结束循环时
-               THREAD.selectCommand(THREAD.getCutPaperCmd());
+              //  if(LINE_BYTE_SIZE==32){
+              //      THREAD.printText("\n");
+              //      THREAD.printText("\n");
+              //      THREAD.printText("\n");
+              //      THREAD.printText("\n");
+              //      THREAD.printText("\n");
+              //  }
+              //  //结束循环时
+              //  THREAD.selectCommand(THREAD.getCutPaperCmd());
            }
             result.success(true);
         } catch (Exception e) {
             e.printStackTrace();
             result.error("write_error", e.getMessage(), exceptionToString(e));
           }
-    } else {
-      result.error("write_error");
-    }
 }
 
 public void sendprint(JSONObject jsonData){
