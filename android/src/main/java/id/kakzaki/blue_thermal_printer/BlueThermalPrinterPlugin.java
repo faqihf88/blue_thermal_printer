@@ -31,6 +31,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.EventChannel.StreamHandler;
 import io.flutter.plugin.common.EventChannel.EventSink;
@@ -986,7 +991,7 @@ public void sendprint(JSONObject jsonData){
         return sb.toString();
     }
 
-    
+
   private class ConnectedThread extends Thread {
     private final BluetoothSocket mmSocket;
     private final InputStream inputStream;
