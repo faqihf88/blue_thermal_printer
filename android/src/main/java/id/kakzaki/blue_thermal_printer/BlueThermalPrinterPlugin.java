@@ -676,15 +676,15 @@ public void sendprint(JSONObject jsonData){
           //   THREAD.write(getFontSizeCmd(fontType_int));
 
             if (infoType == 0) {
-                printText(text);
+                printText(text, result);
             } else if (infoType == 1) {
                 if (textArray != null && textArray.length() > 0) {
                     if (textArray.length() == 2) {
-                       printText(printTwoData(textArray.get(0).toString(), textArray.get(1).toString()));
+                       printText(printTwoData(textArray.get(0).toString(), textArray.get(1).toString()), result);
                     } else if (textArray.length() == 3) {
-                        printText(printThreeData(textArray.get(0).toString(), textArray.get(1).toString(), textArray.get(2).toString()));
+                        printText(printThreeData(textArray.get(0).toString(), textArray.get(1).toString(), textArray.get(2).toString()), result);
                     } else if (textArray.length() == 4) {
-                        printText(printFourData(textArray.get(0).toString(), textArray.get(1).toString(), textArray.get(2).toString(), textArray.get(3).toString()));
+                        printText(printFourData(textArray.get(0).toString(), textArray.get(1).toString(), textArray.get(2).toString(), textArray.get(3).toString()), result);
                     }
                 }
             }
