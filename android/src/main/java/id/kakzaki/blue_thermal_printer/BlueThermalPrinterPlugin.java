@@ -505,7 +505,7 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
     try {
     //   switch (size) {
     //     case 0:
-          THREAD.write(cc);
+          // THREAD.write(cc);
     //       break;
     //     case 1:
           // THREAD.write(bb);
