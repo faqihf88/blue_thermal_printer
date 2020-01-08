@@ -1,4 +1,4 @@
-package id.kakzaki.blue_thermal_printer;
+package com.teraskode.bluetooth_printer_plugin;
 
 import android.Manifest;
 import android.app.Activity;

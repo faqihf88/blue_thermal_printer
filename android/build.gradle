@@ -1,5 +1,5 @@
-group 'id.kakzaki.blue_thermal_printer'
-version '1.0.9'
+group 'com.teraskode.bluetooth_printer_plugin'
+version '0.0.1'
 
 buildscript {
     repositories {
