@@ -603,7 +603,8 @@ public class BlueThermalPrinterPlugin implements MethodCallHandler, RequestPermi
   private void printSeperatorLine(Result result) {
    try {
     StringBuilder sb = new StringBuilder();
-    for (int i=0;i< PrinterCommands.LINE_BYTE_SIZE;i++){
+    int dowo = PrinterCommands.LINE_BYTE_SIZE;
+    for (int i=0;i < dowo;i++){
         sb.append("-");
     }
 
