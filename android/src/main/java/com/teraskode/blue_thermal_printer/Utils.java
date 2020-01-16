@@ -1,4 +1,4 @@
-package com.teraskode.bluetooth_printer_plugin;
+package com.teraskode.blue_thermal_printer;
 
 import android.graphics.Bitmap;
 import android.util.Log;

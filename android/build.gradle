@@ -1,4 +1,4 @@
-group 'com.teraskode.bluetooth_printer_plugin'
+group 'com.teraskode.blue_thermal_printer'
 version '0.0.1'
 
 buildscript {
